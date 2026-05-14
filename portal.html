@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Portal terpusat untuk seluruh layanan dan ekosistem digital group perusahaan." />
+  <title>Corporate Portal</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Sora:wght@300;400;500;600;700&display=swap"
+    rel="stylesheet" />
+  <link rel="stylesheet" href="assets/css/main.css" />
+</head>
+
+<!--
+  Alur:
+    1. Buka halaman → company = null → tampil SELECT SCREEN
+    2. Klik kartu perusahaan → switchTo(c) → tampil MAIN APP
+    3. Klik "← Ganti" di navbar → backToHome() → kembali ke SELECT SCREEN
+-->
+
+<body class="neutral" x-data="portalData()">
+
+  <!-- ═══ COMPANY SELECTION SCREEN ══════════════════════════════════════ -->
+  <div class="select-screen" x-show="!company" x-transition.opacity.duration.400ms>
+    <div class="select-header">
+      <div class="select-logo">CORPORATE PLAN & PERFORMANCE <span>PORTAL</span></div>
+      <p class="select-subtitle">Pilih perusahaan untuk melanjutkan</p>
+    </div>
+
+    <div class="select-grid">
+      <!-- Prasetia -->
+      <button class="select-card select-card--prasetia" @click="switchTo('prasetia')">
+        <div class="select-card-icon"></div>
+        <div class="select-card-name">PRASETIA</div>
+        <div class="select-card-sub">GROUP</div>
+        <div class="select-card-enter">
+          Masuk
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <path d="M5 12h14M12 5l7 7-7 7" />
+          </svg>
+        </div>
+      </button>
+
+      <!-- Verdanco -->
+      <button class="select-card select-card--verdanco" @click="switchTo('verdanco')">
+        <div class="select-card-icon"></div>
+        <div class="select-card-name">VERDANCO</div>
+        <div class="select-card-sub">GROUP</div>
+        <div class="select-card-enter">
+          Masuk
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <path d="M5 12h14M12 5l7 7-7 7" />
+          </svg>
+        </div>
+      </button>
+    </div>
+  </div>
+
+  <!-- ═══ MAIN APP (muncul setelah perusahaan dipilih) ══════════════════ -->
+  <div x-show="company" x-transition.opacity.duration.300ms>
+
+    <!-- NAVBAR -->
+    <nav>
+      <a href="#" class="logo" @click.prevent="backToHome()">
+        <span x-text="company ? companies[company].name : ''"></span>
+        <span style="color: var(--text)" x-text="company ? (' · ' + companies[company].sub) : ''"></span>
+      </a>
+      <button id="btn-back" class="back-btn" @click="backToHome()">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+          <path d="M19 12H5M12 5l-7 7 7 7" />
+        </svg>
+        Ganti Perusahaan
+      </button>
+    </nav>
+
+    <!-- MENU UTAMA -->
+    <section aria-label="Menu Utama" style="padding-top: calc(var(--nav-height) + var(--space-8))">
+      <div class="section-label">Menu Utama</div>
+      <div class="menu-grid">
+        <template x-for="item in (company ? companies[company].menus : [])" :key="item.title">
+          <a :href="item.url" :target="item.target || '_self'"
+            :rel="item.target === '_blank' ? 'noopener noreferrer' : ''" class="menu-card">
+            <div class="card-icon" x-text="item.icon"></div>
+            <div class="card-title" x-text="item.title"></div>
+            <div class="card-desc" x-text="item.desc"></div>
+            <div class="card-arrow">
+              <span x-text="item.label"></span>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+                aria-hidden="true">
+                <path d="M5 12h14M12 5l7 7-7 7" />
+              </svg>
+            </div>
+          </a>
+        </template>
+      </div>
+    </section>
+
+    <!-- AKSES CEPAT -->
+    <section aria-label="Akses Cepat" style="padding-top: 0">
+      <div class="section-label">Akses Cepat</div>
+      <div class="quick-row">
+        <template x-for="link in (company ? companies[company].quickLinks : [])" :key="link.label">
+          <a :href="link.url" class="quick-link">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+              aria-hidden="true">
+              <path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3" />
+            </svg>
+            <span x-text="link.label"></span>
+          </a>
+        </template>
+      </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer>
+      <div>
+        <span class="footer-dot" aria-hidden="true"></span>
+        Sistem aktif —
+        <span x-text="new Date().toLocaleDateString('id-ID', {
+          weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'
+        })"></span>
+      </div>
+      <div x-text="company ? (companies[company].name + ' Group © ' + new Date().getFullYear()) : ''"></div>
+    </footer>
+
+  </div><!-- /main app -->
+
+  <!-- ═══ SCRIPTS ═══════════════════════════════════════════════════════ -->
+  <!--
+    Urutan wajib:
+      1. GSAP         — tersedia global sebelum app.js
+      2. app.js       — mendaftarkan window.portalData()
+      3. Alpine.js    — (defer) boot terakhir, baca x-data
+  -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="assets/js/app.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/alpinejs/3.13.5/cdn.min.js" defer></script>
+
+</body>
+
+</html>

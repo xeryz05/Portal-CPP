@@ -1,0 +1,24 @@
+/* ════════════════════════════════════════════
+   ANIMATIONS  ·  Keyframes & Motion Utilities
+   ════════════════════════════════════════════ */
+
+/* ─── Pulse (footer dot) ─── */
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.4; }
+}
+
+/* ─── Theme Transition Override ─── */
+/* Applied temporarily via JS when switching brands */
+.theme-transitioning * {
+  transition:
+    background var(--transition),
+    color var(--transition),
+    border-color var(--transition) !important;
+}
+
+/*
+  GSAP entrance targets — tidak perlu CSS manual di sini,
+  GSAP menangani from/to via app.js.
+  Tambahkan class .gsap-* jika ingin override initial state.
+*/
