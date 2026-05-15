@@ -51,7 +51,7 @@ window.portalData = function () {
         ],
         quickLinks: [
           { label: 'Bot CPP', url: '#' },
-          { label: 'Documentation', url: '#' }
+          { label: 'Documentation', url: 'https://verdanco.sg.larksuite.com/share/base/view/shrlgLWTau2T0dvPwQxEUhNabec' }
         ],
       },
 
