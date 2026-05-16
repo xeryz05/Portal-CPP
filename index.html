@@ -80,7 +80,8 @@
       <div class="menu-grid">
         <template x-for="item in (company ? companies[company].menus : [])" :key="item.title">
           <a :href="item.url" :target="item.target || '_self'"
-            :rel="item.target === '_blank' ? 'noopener noreferrer' : ''" class="menu-card">
+            :rel="item.target === '_blank' ? 'noopener noreferrer' : ''" class="menu-card"
+            @click="item.url === '#' ? ($event.preventDefault(), showDevModal = true) : null">
             <div class="card-icon" x-text="item.icon"></div>
             <div class="card-title" x-text="item.title"></div>
             <div class="card-desc" x-text="item.desc"></div>
@@ -101,7 +102,9 @@
       <div class="section-label">Akses Cepat</div>
       <div class="quick-row">
         <template x-for="link in (company ? companies[company].quickLinks : [])" :key="link.label">
-          <a :href="link.url" class="quick-link">
+          <a :href="link.url" class="quick-link" 
+            @click="link.url === '#' ? ($event.preventDefault(), showDevModal = true) : null" 
+            :target="link.target || '_self'">
             <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
               aria-hidden="true">
               <path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3" />
@@ -125,6 +128,21 @@
     </footer>
 
   </div><!-- /main app -->
+
+  <!-- ═══ MODAL DEVELOP ════════════════════════════════════════════════ -->
+  <div class="modal-overlay" x-show="showDevModal" style="display: none;" x-transition.opacity
+    @click.self="showDevModal = false">
+    <div class="modal-content" x-show="showDevModal" x-transition.scale>
+      <div class="modal-icon">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+        </svg>
+      </div>
+      <h3 class="modal-title">Sedang Di-Develop</h3>
+      <p class="modal-desc">Fitur ini belum tersedia dan masih dalam tahap pengembangan oleh tim.</p>
+      <button class="modal-btn" @click="showDevModal = false">Mengerti</button>
+    </div>
+  </div>
 
   <!-- ═══ SCRIPTS ═══════════════════════════════════════════════════════ -->
   <!--

@@ -13,6 +13,7 @@
 window.portalData = function () {
   return {
     company: null,
+    showDevModal: false,
 
     // ── Brand switcher ──
     switchTo(c) {
@@ -51,7 +52,7 @@ window.portalData = function () {
         ],
         quickLinks: [
           { label: 'Bot CPP', url: '#' },
-          { label: 'Documentation', url: 'https://verdanco.sg.larksuite.com/share/base/view/shrlgLWTau2T0dvPwQxEUhNabec' }
+          { label: 'Documentation', url: 'https://verdanco.sg.larksuite.com/share/base/view/shrlgLWTau2T0dvPwQxEUhNabec', target: '_blank' }
         ],
       },
 
@@ -67,7 +68,7 @@ window.portalData = function () {
         ],
         quickLinks: [
           { label: 'Bot CPP', url: '#' },
-          { label: 'Documentation', url: '#' }
+          { label: 'Documentation', url: 'https://verdanco.sg.larksuite.com/share/base/view/shrlgLWTau2T0dvPwQxEUhNabec', target: '_blank' }
         ],
       },
     },
